@@ -13,7 +13,7 @@ nohup java -jar bianque.jar &
 curl http://127.0.0.1:8000/bianque/initTable
 ```
 默认端口：8000  
-数据默认存储目录：/data/bianque
+数据默认存储目录：/data/bianque  
 H2默认web控制台：http://localhost:8888/h2-console
 ## 脚本安装
 ```shell
