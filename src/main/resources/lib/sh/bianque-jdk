@@ -1,0 +1,116 @@
+#提供几个函数：
+#1. 查询java进程(封装 jsp -l),使用方式为：myjdk.sh jps
+#2. dump指定进程堆栈(封装 jstack [pid] >[file]),使用方式为：myjdk.sh dumpstack [pid] [file]
+#3. dump指定进程堆(封装 jmap -dump:format=b,file=[file] [pid]),使用方式为：myjdk.sh dumpheap [pid] [file]
+#4. 查询指定进程内存使用情况(封装 jstat -gcutil [pid] 1000 10),使用方式为：myjdk.sh mem [pid]
+#5. 查询指定进程类加载情况(封装 jstat -class [pid] 1000 10),使用方式为：myjdk.sh class [pid]
+#6. 查询指定进程线程情况(封装 jstack [pid]),使用方式为：myjdk.sh thread [pid]
+#7. 查询指定进程GC情况(封装 jstat -gc [pid] 1000 10),使用方式为：myjdk.sh gc [pid]
+#8. 查询指定进程GC情况(封装 jstat -gccapacity [pid] 1000 10),使用方式为：myjdk.sh gccapacity [pid]
+#9. 查询指定进程GC情况(封装 jstat -gcnew [pid] 1000 10),使用方式为：myjdk.sh gcnew [pid]
+#10. 查询指定进程GC情况(封装 jstat -gcold [pid] 1000 10),使用方式为：myjdk.sh gcold [pid]
+#11. 查询指定进程GC情况(封装 jstat -gcutil [pid] 1000 10),使用方式为：myjdk.sh gcutil [pid]
+#13. 查询指定进程GC情况(封装 jstat -gcmetacapacity [pid] 1000 10),使用方式为：myjdk.sh gcmetacapacity [pid]
+
+#!/bin/bash
+
+# Function to query java processes
+function jps {
+    jps -l
+}
+
+# Function to dump the stack of a specified process
+function dumpstack {
+    jstack $1 > $2
+}
+
+# Function to dump the heap of a specified process
+function dumpheap {
+    jmap -dump:format=b,file=$2 $1
+}
+
+# Function to query the memory usage of a specified process
+function mem {
+    jstat -gcutil $1 1000 10
+}
+
+# Function to query the class loading situation of a specified process
+function class {
+    jstat -class $1 1000 10
+}
+
+# Function to query the thread situation of a specified process
+function thread {
+    jstack $1
+}
+
+# Function to query the GC situation of a specified process
+function gc {
+    jstat -gc $1 1000 10
+}
+
+# Function to query the GC capacity situation of a specified process
+function gccapacity {
+    jstat -gccapacity $1 1000 10
+}
+
+# Function to query the new GC situation of a specified process
+function gcnew {
+    jstat -gcnew $1 1000 10
+}
+
+# Function to query the old GC situation of a specified process
+function gcold {
+    jstat -gcold $1 1000 10
+}
+
+# Function to query the GC utilization situation of a specified process
+function gcutil {
+    jstat -gcutil $1 1000 10
+}
+
+# Function to query the GC metacapacity situation of a specified process
+function gcmetacapacity {
+    jstat -gcmetacapacity $1 1000 10
+}
+
+# help
+function help {
+    echo "Usage: myjdk.sh [option] [pid] [file]"
+    echo "Options:"
+    echo "  jps: Query java processes. example: myjdk.sh jps"
+    echo "  dumpstack: Dump the stack of a specified process. example: myjdk.sh dumpstack [pid] [file]"
+    echo "  dumpheap: Dump the heap of a specified process. example: myjdk.sh dumpheap [pid] [file]"
+    echo "  mem: Query the memory usage of a specified process. example: myjdk.sh mem [pid]"
+    echo "  class: Query the class loading situation of a specified process. example: myjdk.sh class [pid]"
+    echo "  thread: Query the thread situation of a specified process. example: myjdk.sh thread [pid]"
+    echo "  gc: Query the GC situation of a specified process. example: myjdk.sh gc [pid]"
+    echo "  gccapacity: Query the GC capacity situation of a specified process. example: myjdk.sh gccapacity [pid]"
+    echo "  gcnew: Query the new GC situation of a specified process. example: myjdk.sh gcnew [pid]"
+    echo "  gcold: Query the old GC situation of a specified process. example: myjdk.sh gcold [pid]"
+    echo "  gcutil: Query the GC utilization situation of a specified process. example: myjdk.sh gcutil [pid]"
+    echo "  gcmetacapacity: Query the GC metacapacity situation of a specified process. example: myjdk.sh gcmetacapacity [pid]"
+    echo "  -h: Help"
+    echo "  -help: Help"
+    echo "  help: Help"
+}
+
+# Check the first argument to decide which function to call
+case "$1" in
+    "jps") jps ;;
+    "-h") help ;;
+    "-help") help ;;
+    "help") help ;;
+    "dumpstack") dumpstack $2 $3 ;;
+    "dumpheap") dumpheap $2 $3 ;;
+    "mem") mem $2 ;;
+    "class") class $2 ;;
+    "thread") thread $2 ;;
+    "gc") gc $2 ;;
+    "gccapacity") gccapacity $2 ;;
+    "gcnew") gcnew $2 ;;
+    "gcold") gcold $2 ;;
+    "gcutil") gcutil $2 ;;
+    "gcmetacapacity") gcmetacapacity $2 ;;
+    *) echo "Invalid argument. Please check the usage." ;;
+esac
